@@ -1,0 +1,52 @@
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+</head>
+<body>
+<form name="testform" id="testform" action="submit.php" method="POST">
+	First Name: <input type="text" name="fname" id="fname" value =""/> <br/>
+	Last Name: <input type="text" name="lname" id="lname" value ="" /> <br/>
+	Email : <input type="text" name="email" id="email" value=""/> <br/>
+</form>
+<input type="button"  id="ajaxpost" value="Submit" />
+<div id="inputdata"></div>
+
+<script>
+$(document).ready(function()
+{
+
+	
+$("#ajaxpost").click(function()
+{
+	$("#testform").submit(function(e)
+	{
+		$("#inputdata").html("<img src='loading.gif'/>");
+		var postData = $(this).serializeArray();
+		var formURL = $(this).attr("action");
+		$.ajax(
+		{
+			url : formURL,
+			type: "POST",
+			data : postData,
+			success:function(data, textStatus, jqXHR) 
+			{
+				$("#inputdata").html('<pre><code>'+data+'</code></pre>');
+
+			},
+			error: function(jqXHR, textStatus, errorThrown) 
+			{
+				$("#inputdata").html('<pre><code>AJAX Request Failed<br/> textStatus='+textStatus+', errorThrown='+errorThrown+'</code></pre>');
+			}
+		});
+	    e.preventDefault();	//STOP default action
+	    e.unbind();
+	});
+	$("#testform").submit(); //SUBMIT FORM
+	
+
+	
+});
+    });
+</script>
+</body>
+
